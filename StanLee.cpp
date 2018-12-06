@@ -13,20 +13,23 @@ struct File
 
 struct Inode
 {
-	Inode *parent;
-	bool active;
+	Inode *parent; //Puntero hacia el padre
+	bool active; //Variable para saber si está utilizado
 	char type; // 'f' para file, 'd' para directory
 
 	//Elementos del file
-	File *file;
-	int fileSize;
-	int creationDate;
+	File *file; //puntero al archivo, la estructura de este está más arriba.
+	int fileSize; //tamaño del archivo
+	int creationDate; //fecha de creación
 
 	//Elementos directory
-	string *dirName;
-	vector<Inode*> subInodes;
+	string *dirName; //Nombre del directorio
+	vector<Inode*> subInodes; //Punteros a los otros archivos o directorios
 };
 
+/*Esta es la clase para el árbol, falta
+ implementar las funciones para desplazarse
+ por este, o buscar inodes específicos.*/
 class InodeTree
 {
 private:
@@ -35,11 +38,14 @@ private:
 public:
 	InodeTree()
 	{
+		//Aquí se inicializa el primer inode (root)
 		root.active = true;
 		root.type = 'd';
-		string name = "root";
+		string name = "/";
 		root.dirName = &name;
 	}
+
+	//Esta funcion devuelve el root
 	Inode* getRoot()
 	{
 		return &root;
@@ -48,11 +54,13 @@ public:
 	
 };
 
+//Esta función limpia la pantalla de la consola
 static void clearScreen()
 	{
 		cout << "\033[2J";
 		cout << "\033[1;1H";
 	}
+
 
 class StanLeeFS
 {
@@ -62,7 +70,7 @@ public:
 	StanLeeFS()
 	{
 		actual = tree.getRoot();
-		
+
 	}
 
 	
