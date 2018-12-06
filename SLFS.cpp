@@ -39,9 +39,19 @@ class Disk
 {
 private:
 	//3 bloques para datos
-	Block blocks[6];
+	const static int diskSize = 6;
+	Block blocks[diskSize];
 
 public:
+	Disk()
+	{
+		for (int i = 0; i < diskSize; ++i)
+		{
+			Block blk;
+			blocks[i] = blk;
+		}
+	}
+
 	Block* read(int blockNum)
 	{
 		return &blocks[blockNum];
@@ -58,7 +68,20 @@ public:
 	StanLeeFS();
 	void mount(Disk *d)
 	{
-		
+		SuperBlock sb;
+		sb.blockNum = 6;
+
+		Bitmap bmp;
+		bmp.usedInodes[1] = true;
+		for (int i = 1; i < inodesPerBlock; ++i)
+		{
+			bmp.usedInodes[i] = 0
+		}
+
+		Inode newInodes[inodesPerBlock];
+
+
+
 	}
 
 	void createDir()
@@ -70,10 +93,19 @@ public:
 	{
 
 	}
+
+	//readFile()
 };
 
 int main(int argc, char const *argv[])
 {
-	/* code */
+	Block blk;
+	blk.data[0] = 'x';
+
+	Disk *d = new Disk;
+	d->write(0, blk);
+
+	//cout << d.read(0)->data[0];
+
 	return 0;
 }
