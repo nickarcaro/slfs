@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <vector>
 using namespace std;
 
 class Memory
@@ -16,6 +16,18 @@ public:
 	StanLeeFS();
 	~StanLeeFS();
 	
+void createDir(){
+}
+
+void createFile(){
+}
+	
+void updateFile(){
+}
+
+void deleteFile(){
+}
+	
 };
 
 class Shell
@@ -23,5 +35,6 @@ class Shell
 public:
 	Shell();
 	~Shell();
+	
 	
 };
