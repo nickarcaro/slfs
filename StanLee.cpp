@@ -64,6 +64,9 @@ static void clearScreen()
 
 class StanLeeFS
 {
+	/*El inode actual va a servir para la 
+	  navegación por el sistema de archivos, 
+	  nos dice en que inode estamos actualmente.*/
 	Inode *actual;
 	InodeTree tree;
 public:
@@ -72,6 +75,12 @@ public:
 		actual = tree.getRoot();
 
 	}
+
+	/*TODO:
+		implementar:
+			mkdir()
+			cd()
+			createFile()*/
 
 	
 	
