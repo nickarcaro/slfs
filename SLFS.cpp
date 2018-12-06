@@ -56,8 +56,20 @@ class StanLeeFS
 {
 public:
 	StanLeeFS();
-	
-	
+	void mount(Disk *d)
+	{
+		
+	}
+
+	void createDir()
+	{
+
+	}
+
+	void createFile()
+	{
+
+	}
 };
 
 int main(int argc, char const *argv[])
