@@ -103,7 +103,7 @@ public:
         std::time_t end_time = std::chrono::system_clock::to_time_t(end); //se convierte en variable time_t
 
 		actual->subInodes.push_back(newInode);
-		cout << "Creación  " << std::ctime(&end_time);
+		cout << "Create date:" << std::ctime(&end_time);
         newInode->creationDate = std::ctime(&end_time);   //se añade el tiempo en formato dia/mes dia numerico hora:min:seg año
 		//cout << actual->subInodes[0]->dirName;
 		
@@ -178,6 +178,7 @@ public:
 		newInode->parent = actual;
 		newInode->active = true;
 		newInode->type = 'f';
+		newInode->fileSize = sizeof(data);
 		//Falta poner filesize y creationDate
 		
 		File *newFile = new File;
@@ -189,7 +190,7 @@ public:
 		newInode->file = newFile;
 
 		actual->subInodes.push_back(newInode);
-		cout << "Creación  " << std::ctime(&end_time);
+		cout << "Create date:  " << std::ctime(&end_time);
 		newInode->creationDate = std::ctime(&end_time); //se añade el tiempo en formato dia/mes dia numerico hora:min:seg año
 		
 
@@ -306,4 +307,3 @@ int main()
 	
 	return 0;
 }
-
