@@ -6,6 +6,9 @@
 
 using namespace std;
 
+//Compile con: g++ -o sl StanLee.cpp
+//Ejecute con: ./sl
+
 struct File
 {
 	string name;
@@ -103,10 +106,28 @@ public:
 			}
 			else if (actual->subInodes[i]->type == 'f')
 			{
-				//Falta crear archivos para ver si esto funciona
+				
 				cout << actual->subInodes[i]->file->name << endl;
 			}
 		}
+
+	}
+	void mkfile(string name, string data)
+	{
+		Inode *newInode = new Inode;
+		newInode->parent = actual;
+		newInode->active = true;
+		newInode->type = 'f';
+		//Falta poner filesize y creationDate
+		
+		File *newFile = new File;
+
+		newFile->name = name + ".txt";
+		newFile->data = data;
+
+		newInode->file = newFile;
+
+		actual->subInodes.push_back(newInode);
 
 	}
 
@@ -150,8 +171,23 @@ int main()
 		}
 		else if(!str.compare("mkdir"))
 		{
+
+			//uso: mkdir <Nombre directorio>
 			cin >> str;
 			sl.mkdir(str);
+		}
+		else if(!str.compare("mkfile"))
+		{
+			//uso: mkfile <Nombre archivo> "<Datos>"
+			cin >> str;
+			string name = str;
+
+			getline(cin, str);
+			string data = str;
+
+			
+
+			sl.mkfile(name, data);
 		}
 	}
 
