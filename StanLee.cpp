@@ -3,7 +3,8 @@
 #include <vector>
 #include <string>
 #include <sstream>
-
+#include <chrono>
+#include <ctime>
 using namespace std;
 
 //Compile con: g++ -o sl StanLee.cpp
@@ -24,7 +25,7 @@ struct Inode
 	//Elementos del file
 	File *file; //puntero al archivo, la estructura de este está más arriba.
 	int fileSize; //tamaño del archivo
-	int creationDate; //fecha de creación
+	char* creationDate; //fecha de creación
 
 	//Elementos directory
 	string dirName; //Nombre del directorio
@@ -84,19 +85,26 @@ public:
 	}
 	string getState()
 	{
-		return actualDir + " ";
+		return actualDir;
 	}
 	void mkdir(string name)
 	{
+		std::chrono::time_point<std::chrono::system_clock> end; //se llama al reloj del sistema en este punto
+		
+		end = std::chrono::system_clock::now();  //se inicializa el conteo del tiempo del mkdir
+        
+		
 		//cout << actual->dirName;
 		Inode *newInode = new Inode;
 		newInode->parent = actual;
 		newInode->active = true;
 		newInode->type = 'd';
 		newInode->dirName = name;
+                std::time_t end_time = std::chrono::system_clock::to_time_t(end); //se convierte en variable time_t
 
 		actual->subInodes.push_back(newInode);
-
+		cout << "Creación  " << std::ctime(&end_time);
+                newInode->creationDate = std::ctime(&end_time);   //se añade el tiempo en formato dia/mes dia numerico hora:min:seg año
 		//cout << actual->subInodes[0]->dirName;
 		
 	}
@@ -130,7 +138,7 @@ public:
 	{
 		if (!inode->dirName.compare(dir))
 		{
-			
+			cout << "aaa";
 			return inode;
 		}
 		else
@@ -163,7 +171,9 @@ public:
 		}
 	}
 	void mkfile(string name, string data)
-	{
+	{    
+		std::chrono::time_point<std::chrono::system_clock>  end; //se llama al reloj del sistema en este punto
+		end = std::chrono::system_clock::now(); //se inicializa el conteo del tiempo del mkdir
 		Inode *newInode = new Inode;
 		newInode->parent = actual;
 		newInode->active = true;
@@ -174,31 +184,15 @@ public:
 
 		newFile->name = name + ".txt";
 		newFile->data = data;
-
+        
+        std::time_t end_time = std::chrono::system_clock::to_time_t(end); //se convierte en variable time_t
 		newInode->file = newFile;
 
 		actual->subInodes.push_back(newInode);
+		cout << "Creación  " << std::ctime(&end_time);
+		newInode->creationDate = std::ctime(&end_time); //se añade el tiempo en formato dia/mes dia numerico hora:min:seg año
+		
 
-	}
-	string getDirStr(Inode *i, string dir)
-	{
-		cout << endl << dir;
-		string iDir = i->dirName;
-		if (!iDir.compare("/"))
-		{
-			if (dir.size() > 0)
-			{
-				return dir;
-			}
-			else
-			{
-				return iDir;
-			}
-		}
-		else
-		{
-			return getDirStr(i->parent, "/" + iDir);
-		}
 	}
 
 	string cd(string dir)
@@ -206,34 +200,20 @@ public:
 		//Ir al parent
 		if (!dir.compare(".."))
 		{
-			if(!actual->dirName.compare("/"))
-			{
-
-				return getState();
-			}
-			else
-			{
-
-				actual = actual->parent;
-				cout << actual->dirName;
-				actualDir = getDirStr(actual, "");
-				return actualDir + " ";
-			}
+			/* code */
 		}
 		else
 		{
 			Inode *newActual = findDir(dir, actual);
+			if(newActual == NULL)
+			{
+
+			}
 			if (newActual != NULL)
 			{
 				actual = newActual;
-				if (!actualDir.compare("/"))
-				{
-					actualDir = actualDir + dir;
-				}
-				else
-				{
-					actualDir = actualDir + "/" + dir;
-				}
+
+				actualDir = actualDir + dir;
 				return actualDir;
 			}
 			else
@@ -312,7 +292,7 @@ int main()
 			if (newDir.size() > 0)
 			{
 				clearScreen();
-				cout << sl.getState();
+				cout << newDir;
 			}
 			else
 			{
