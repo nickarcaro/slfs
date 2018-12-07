@@ -84,7 +84,7 @@ public:
 	}
 	string getState()
 	{
-		return actualDir;
+		return actualDir + " ";
 	}
 	void mkdir(string name)
 	{
@@ -130,7 +130,7 @@ public:
 	{
 		if (!inode->dirName.compare(dir))
 		{
-			cout << "aaa";
+			
 			return inode;
 		}
 		else
@@ -180,26 +180,60 @@ public:
 		actual->subInodes.push_back(newInode);
 
 	}
+	string getDirStr(Inode *i, string dir)
+	{
+		cout << endl << dir;
+		string iDir = i->dirName;
+		if (!iDir.compare("/"))
+		{
+			if (dir.size() > 0)
+			{
+				return dir;
+			}
+			else
+			{
+				return iDir;
+			}
+		}
+		else
+		{
+			return getDirStr(i->parent, "/" + iDir);
+		}
+	}
 
 	string cd(string dir)
 	{
 		//Ir al parent
 		if (!dir.compare(".."))
 		{
-			/* code */
+			if(!actual->dirName.compare("/"))
+			{
+
+				return getState();
+			}
+			else
+			{
+
+				actual = actual->parent;
+				cout << actual->dirName;
+				actualDir = getDirStr(actual, "");
+				return actualDir + " ";
+			}
 		}
 		else
 		{
 			Inode *newActual = findDir(dir, actual);
-			if(newActual == NULL)
-			{
-
-			}
 			if (newActual != NULL)
 			{
 				actual = newActual;
-
-				actualDir = actualDir + dir;
+				if (!actualDir.compare("/"))
+				{
+					actualDir = actualDir + dir;
+				}
+				else
+				{
+					actualDir = actualDir + "/" + dir;
+				}
 				return actualDir;
 			}
 			else
@@ -278,7 +312,7 @@ int main()
 			if (newDir.size() > 0)
 			{
 				clearScreen();
-				cout << newDir;
+				cout << sl.getState();
 			}
 			else
 			{
