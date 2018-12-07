@@ -79,6 +79,10 @@ public:
 		actual = tree.getRoot();
 
 	}
+	Inode* getRoot()
+	{
+		return actual;
+	}
 	void mkdir(string name)
 	{
 		//cout << actual->dirName;
@@ -112,6 +116,48 @@ public:
 		}
 
 	}
+
+	/*findDir() busca en direcciones de tipo
+	  "foo/bar/cat/dog", de encontrar la
+	  dirección retorna el inode 
+	  correspondiente, pero de no ser así
+	  retorna NULL.*/
+	Inode* findDir(string dir, Inode *inode)
+	{
+		if (!inode->dirName.compare(dir))
+		{
+			cout << "aaa";
+			return inode;
+		}
+		else
+		{
+			//foo/bar/mew
+			string temp;
+			stringstream ss(dir);
+			getline(ss, temp, '/');
+
+			//temp=foo
+			bool found = false;
+			for (int i = 0; i < inode->subInodes.size(); ++i)
+			{
+				if (!inode->subInodes[i]->dirName.compare(temp))
+				{
+					if (temp.compare(dir))
+					{
+						dir.erase(0, temp.size()+1);
+					}
+					cout << dir;
+					bool found = true;
+					return findDir(dir, inode->subInodes[i]);
+				}
+			}
+			
+			if (!found)
+			{
+				return NULL;
+			}
+		}
+	}
 	void mkfile(string name, string data)
 	{
 		Inode *newInode = new Inode;
@@ -129,6 +175,11 @@ public:
 
 		actual->subInodes.push_back(newInode);
 
+	}
+
+	string cd(string dir)
+	{
+		
 	}
 
 	/*TODO:
@@ -188,6 +239,14 @@ int main()
 			
 
 			sl.mkfile(name, data);
+		}
+		else if (!str.compare("fd"))
+		{
+			Inode *inode = sl.findDir("foo/bar", sl.getRoot());
+			if (inode != NULL)
+			{
+				cout << "It works!" << endl;
+			}
 		}
 	}
 
