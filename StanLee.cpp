@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <chrono>
+#include <ctime>
 
 using namespace std;
 
@@ -20,11 +22,11 @@ struct Inode
 	Inode *parent; //Puntero hacia el padre
 	bool active; //Variable para saber si está utilizado
 	char type; // 'f' para file, 'd' para directory
+	int size; //tamaño de todo en su interior;
 
 	//Elementos del file
 	File *file; //puntero al archivo, la estructura de este está más arriba.
-	int fileSize; //tamaño del archivo
-	int creationDate; //fecha de creación
+	char* creationDate; //fecha de creación
 
 	//Elementos directory
 	string dirName; //Nombre del directorio
@@ -88,6 +90,9 @@ public:
 	}
 	void mkdir(string name)
 	{
+		std::chrono::time_point<std::chrono::system_clock> end; //se llama al reloj del sistema en este punto
+
+		end = std::chrono::system_clock::now();  //se inicializa el conteo del tiempo del mkdir
 		//cout << actual->dirName;
 		Inode *newInode = new Inode;
 		newInode->parent = actual;
@@ -95,7 +100,12 @@ public:
 		newInode->type = 'd';
 		newInode->dirName = name;
 
+		std::time_t end_time = std::chrono::system_clock::to_time_t(end); //se convierte en variable time_t
+
 		actual->subInodes.push_back(newInode);
+
+		cout << "Creación  " << std::ctime(&end_time);
+        newInode->creationDate = std::ctime(&end_time);   //se añade el tiempo en formato dia/mes dia numerico hora:min:seg año
 
 		//cout << actual->subInodes[0]->dirName;
 		
@@ -164,6 +174,8 @@ public:
 	}
 	void mkfile(string name, string data)
 	{
+		std::chrono::time_point<std::chrono::system_clock>  end; //se llama al reloj del sistema en este punto
+		end = std::chrono::system_clock::now(); //se inicializa el conteo del tiempo del mkdir
 		Inode *newInode = new Inode;
 		newInode->parent = actual;
 		newInode->active = true;
@@ -174,10 +186,15 @@ public:
 
 		newFile->name = name + ".txt";
 		newFile->data = data;
+		std::time_t end_time = std::chrono::system_clock::to_time_t(end); //se convierte en variable time_t
 
 		newInode->file = newFile;
 
 		actual->subInodes.push_back(newInode);
+
+		clearScreen();
+		cout << newFile->name<< " created on  " << std::ctime(&end_time);
+		newInode->creationDate = std::ctime(&end_time); //se añade el tiempo en formato dia/mes dia numerico hora:min:seg año
 
 	}
 	string getDirStr(Inode *i, string dir)
@@ -246,9 +263,8 @@ public:
 
 	/*TODO:
 		implementar:
-			mkdir()
-			cd()
-			createFile()*/
+			sl() : soft link
+			hl() : hard link*/
 
 	
 	
@@ -303,6 +319,7 @@ int main()
 			
 
 			sl.mkfile(name, data);
+			cout << endl << sl.getState();
 		}
 		else if (!str.compare("cd"))
 		{
