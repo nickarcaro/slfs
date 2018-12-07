@@ -45,7 +45,7 @@ public:
 		//Aquí se inicializa el primer inode (root)
 		root->active = true;
 		root->type = 'd';
-		
+		root->parent = root;
 		root->dirName = "/";
 	}
 
@@ -73,15 +73,18 @@ class StanLeeFS
 	  nos dice en que inode estamos actualmente.*/
 	Inode *actual;
 	InodeTree tree;
+
+	string actualDir;
 public:
 	StanLeeFS()
 	{
 		actual = tree.getRoot();
+		actualDir = actual->dirName;
 
 	}
-	Inode* getRoot()
+	string getState()
 	{
-		return actual;
+		return actualDir;
 	}
 	void mkdir(string name)
 	{
@@ -106,14 +109,15 @@ public:
 		{
 			if (actual->subInodes[i]->type == 'd')
 			{
-				cout << actual->subInodes[i]->dirName << endl;
+				cout << endl << actual->subInodes[i]->dirName;
 			}
 			else if (actual->subInodes[i]->type == 'f')
 			{
 				
-				cout << actual->subInodes[i]->file->name << endl;
+				cout << endl << actual->subInodes[i]->file->name;
 			}
 		}
+		cout << endl;
 
 	}
 
@@ -179,7 +183,31 @@ public:
 
 	string cd(string dir)
 	{
-		
+		//Ir al parent
+		if (!dir.compare(".."))
+		{
+			/* code */
+		}
+		else
+		{
+			Inode *newActual = findDir(dir, actual);
+			if(newActual == NULL)
+			{
+
+			}
+			if (newActual != NULL)
+			{
+				actual = newActual;
+
+				actualDir = actualDir + dir;
+				return actualDir;
+			}
+			else
+			{
+
+				return "";
+			}
+		}
 	}
 
 	/*TODO:
@@ -203,28 +231,30 @@ int main()
 	
 	string state = "/";
 	string str;
+	cout << sl.getState();
 
 	while(run && cin >> str)
 	{
+		clearScreen();
+		cout << sl.getState();
 		// "q" para salir del programa
 		if(!str.compare("q"))
 		{
 			run = false;
+			clearScreen();
 		}
 		else if(!str.compare("ls"))
 		{
+			clearScreen();
 			sl.ls();
-		}
-		else if(!str.compare("cd"))
-		{
-			cin >> str; // este es el parametro donde queremos ir
-			//sl.cd(str)
+			cout << endl << sl.getState();
 		}
 		else if(!str.compare("mkdir"))
 		{
 
 			//uso: mkdir <Nombre directorio>
 			cin >> str;
+
 			sl.mkdir(str);
 		}
 		else if(!str.compare("mkfile"))
@@ -240,12 +270,21 @@ int main()
 
 			sl.mkfile(name, data);
 		}
-		else if (!str.compare("fd"))
+		else if (!str.compare("cd"))
 		{
-			Inode *inode = sl.findDir("foo/bar", sl.getRoot());
-			if (inode != NULL)
+			cin >> str;
+
+			string newDir = sl.cd(str);
+			if (newDir.size() > 0)
 			{
-				cout << "It works!" << endl;
+				clearScreen();
+				cout << newDir;
+			}
+			else
+			{
+				clearScreen();
+				cout << "No such file or directory" << endl;
+				cout << sl.getState();
 			}
 		}
 	}
