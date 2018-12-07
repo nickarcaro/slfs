@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -23,7 +24,7 @@ struct Inode
 	int creationDate; //fecha de creación
 
 	//Elementos directory
-	string *dirName; //Nombre del directorio
+	string dirName; //Nombre del directorio
 	vector<Inode*> subInodes; //Punteros a los otros archivos o directorios
 };
 
@@ -33,22 +34,22 @@ struct Inode
 class InodeTree
 {
 private:
-	Inode root;
+	Inode *root = new Inode;
 
 public:
 	InodeTree()
 	{
 		//Aquí se inicializa el primer inode (root)
-		root.active = true;
-		root.type = 'd';
-		string name = "/";
-		root.dirName = &name;
+		root->active = true;
+		root->type = 'd';
+		
+		root->dirName = "/";
 	}
 
 	//Esta funcion devuelve el root
 	Inode* getRoot()
 	{
-		return &root;
+		return root;
 	}
 	
 	
@@ -75,6 +76,25 @@ public:
 		actual = tree.getRoot();
 
 	}
+	void mkdir(string name)
+	{
+		//cout << actual->dirName;
+		Inode *newInode = new Inode;
+		newInode->parent = actual;
+		newInode->active = true;
+		newInode->type = 'd';
+		newInode->dirName = name;
+
+		actual->subInodes.push_back(newInode);
+
+		cout << actual->subInodes[0]->dirName;
+		
+	}
+	void ls()
+	{
+		cout << actual->subInodes[0]->dirName;
+
+	}
 
 	/*TODO:
 		implementar:
@@ -91,6 +111,36 @@ int main()
 	StanLeeFS sl;
 	
 
-	//cout << *i.dirName << endl;
+	clearScreen();
+
+	bool run = true;
+	
+	string state = "/";
+	string str;
+
+	while(run && cin >> str)
+	{
+		// "q" para salir del programa
+		if(!str.compare("q"))
+		{
+			run = false;
+		}
+		else if(!str.compare("ls"))
+		{
+			sl.ls();
+		}
+		else if(!str.compare("cd"))
+		{
+			cin >> str; // este es el parametro donde queremos ir
+			//sl.cd(str)
+		}
+		else if(!str.compare("mkdir"))
+		{
+			cin >> str;
+			sl.mkdir(str);
+		}
+	}
+
+	
 	return 0;
 }
