@@ -87,12 +87,26 @@ public:
 
 		actual->subInodes.push_back(newInode);
 
-		cout << actual->subInodes[0]->dirName;
+		//cout << actual->subInodes[0]->dirName;
 		
 	}
 	void ls()
 	{
-		cout << actual->subInodes[0]->dirName;
+		//cout << actual->subInodes[0]->dirName;
+
+
+		for (int i = 0; i < actual->subInodes.size(); ++i)
+		{
+			if (actual->subInodes[i]->type == 'd')
+			{
+				cout << actual->subInodes[i]->dirName << endl;
+			}
+			else if (actual->subInodes[i]->type == 'f')
+			{
+				//Falta crear archivos para ver si esto funciona
+				cout << actual->subInodes[i]->file->name << endl;
+			}
+		}
 
 	}
 
