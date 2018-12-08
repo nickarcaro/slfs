@@ -260,6 +260,28 @@ public:
 			}
 		}
 	}
+	void cat(string str)
+	{
+		string data = "";
+		for (int i = 0; i < actual->subInodes.size(); ++i)
+		{
+			if(!actual->subInodes[i]->file->name.compare(str))
+			{
+				data = actual->subInodes[i]->file->data;
+			}
+		}
+		clearScreen();
+		if (data.size() > 0)
+		{
+			
+			cout << str << ": " << data << endl;
+		}
+		else
+		{
+			cout << "There's no such file" << endl;
+		}
+
+	}
 
 	/*TODO:
 		implementar:
@@ -334,9 +356,16 @@ int main()
 			else
 			{
 				clearScreen();
-				cout << "No such file or directory" << endl;
+				cout << "No such directory" << endl;
 				cout << sl.getState();
 			}
+		}
+		else if (!str.compare("cat"))
+		{
+			cin >> str;
+			sl.cat(str);
+
+			cout << sl.getState();
 		}
 	}
 
