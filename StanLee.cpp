@@ -383,6 +383,7 @@ int main()
 			cout<<" mkfile <nombre> <datos>" << " crea un archivo"<<endl;
 			cout<<" ls " << " muestra lo que contiene el directorio"<<endl;
 			cout<<" q  " << " salir del programa"<<endl << endl;
+			cout << " cat <archivo.txt>" << " abrir  un archivo" << endl << endl;
 
 			cout << sl.getState();
 
