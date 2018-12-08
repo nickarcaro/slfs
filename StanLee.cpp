@@ -345,6 +345,7 @@ int main()
 		}
 		else if (!str.compare("cd"))
 		{
+			//uso: cd <directorio>
 			cin >> str;
 
 			string newDir = sl.cd(str);
