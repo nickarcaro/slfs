@@ -369,6 +369,21 @@ int main()
 
 			cout << sl.getState();
 		}
+		else if (!str.compare("help"))
+		{
+			clearScreen();
+			cout<<endl;
+			cout<<endl;
+			cout<<" cd <directorio> "<< " avanza o retrocede entre directorios"<<endl;
+
+			cout<<" mkdir <nombre> "<< " Crea un directorio"<<endl;
+			cout<<" mkfile <nombre> <datos>" << " crea un archivo"<<endl;
+			cout<<" ls " << " muestra lo que contiene el directorio"<<endl;
+			cout<<" q  " << " salir del programa"<<endl << endl;
+
+			cout << sl.getState();
+
+}
 	}
 
 	
