@@ -282,11 +282,11 @@ public:
 		}
 
 	}
+	void link(string type, string name, string directory)
+	{
 
-	/*TODO:
-		implementar:
-			sl() : soft link
-			hl() : hard link*/
+	}
+
 
 	
 	
@@ -303,6 +303,7 @@ int main()
 	
 	string state = "/";
 	string str;
+	cout << "Comandos: help  q  ls  mkdir  mkfile cd  cat" << endl;
 	cout << sl.getState();
 
 	while(run && cin >> str)
@@ -326,8 +327,10 @@ int main()
 
 			//uso: mkdir <Nombre directorio>
 			cin >> str;
-
+			clearScreen();
 			sl.mkdir(str);
+			cout << endl;
+			cout << sl.getState();
 		}
 		else if(!str.compare("mkfile"))
 		{
