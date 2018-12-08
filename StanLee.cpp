@@ -305,6 +305,18 @@ int main()
 				cout << sl.getState();
 			}
 		}
+		else if (!str.compare("help"))
+		{
+			cout<<endl;
+			cout<<endl;
+			cout<<"cd INODE "<< " avanza o retrocede entre directorios"<<endl;
+
+			cout<<" mkdir NAME "<< " Crea un directorio"<<endl;
+			cout<<" mkfile NAME DATA" << "crea un archivo"<<endl;
+			cout<<"ls " << " muestra lo que contiene el directorio"<<endl;
+			cout<<"q  " << " salir del programa"<<endl;
+
+		}
 	}
 
 	
