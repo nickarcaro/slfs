@@ -362,6 +362,7 @@ int main()
 		}
 		else if (!str.compare("cat"))
 		{
+			//Uso: cat <filename.txt>
 			cin >> str;
 			sl.cat(str);
 
